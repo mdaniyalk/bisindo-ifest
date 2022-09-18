@@ -1,4 +1,7 @@
 /** @type {import('tailwindcss').Config} */
+
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 module.exports = {
   mode: 'jit',
   content: [
@@ -13,6 +16,9 @@ module.exports = {
         'c-03': '#FF6254',
         'c-04': '#1BD5E1',
         'c-05': '#129AA3',
+      },
+      fontFamily: {
+        poppins: ['Poppins', ...defaultTheme.fontFamily.sans],
       },
     },
   },
