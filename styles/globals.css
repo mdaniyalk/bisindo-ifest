@@ -1,3 +1,11 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.bg-grad-orange {
+  background: linear-gradient(90deg, #ffb640 0%, #ff9d00 102.77%);
+}
+
+.bg-grad-green {
+  background: linear-gradient(270deg, #129aa3 0%, #1bd5e1 100%);
+}
