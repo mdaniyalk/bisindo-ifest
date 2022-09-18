@@ -1,26 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+
 html,
 body {
-  padding: 0;
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
-    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  @apply font-poppins;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+@tailwind components;
+@tailwind utilities;
+
+.bg-grad-orange {
+  background: linear-gradient(90deg, #ffb640 0%, #ff9d00 102.77%);
 }
 
-* {
-  box-sizing: border-box;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
-  body {
-    color: white;
-    background: black;
-  }
+.bg-grad-green {
+  background: linear-gradient(270deg, #129aa3 0%, #1bd5e1 100%);
 }
