@@ -1,0 +1,16 @@
+/dataset
+/dataset_raw
+/referensi gerakan
+/Logs
+/Dataset_Keypoints_Data
+/loss graph
+/Dataset_Keypoints_Data_wo_face
+/sibi-env
+/Dataset_Keypoints_Data_wo_face_sintetic
+/model.h5
+/model_1.h5
+/model_2.h5
+/model_3.h5
+/model_4.h5
+
+/*.txt
