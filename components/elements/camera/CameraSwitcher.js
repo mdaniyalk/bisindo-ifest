@@ -1,4 +1,4 @@
-import { IoCameraReverse } from 'react-icons/io5';
+import { IoCameraReverse } from "react-icons/io5";
 
 export function CameraSwitcher({
   devices = [],
@@ -9,7 +9,7 @@ export function CameraSwitcher({
     if (devices.length <= 1) return;
 
     const idx = devices.findIndex(
-      (device) => device?.deviceId === selectedDeviceId
+      (device) => device?.deviceId === selectedDeviceId,
     );
 
     let nextIdx = 0;

@@ -1,4 +1,4 @@
-import Webcam from 'react-webcam';
+import Webcam from "react-webcam";
 
 // TODO: receive data stream
 export function Camera({ selectedDeviceId }) {
@@ -7,7 +7,7 @@ export function Camera({ selectedDeviceId }) {
     console.log(data);
     const track = data.getVideoTracks()[0];
     console.log(track);
-    track.oncapturehandlechange = () => console.log('p');
+    track.oncapturehandlechange = () => console.log("p");
   };
 
   return (

@@ -1,2 +1,2 @@
-export * from './Camera';
-export * from './CameraSwitcher';
+export * from "./Camera";
+export * from "./CameraSwitcher";

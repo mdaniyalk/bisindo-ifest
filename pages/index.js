@@ -1,6 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
-import { Camera, CameraSwitcher } from '/components/elements/camera';
-import DefaultLayout from '/components/layouts/DefaultLayout';
+import { useCallback, useEffect, useState } from "react";
+import { Camera, CameraSwitcher } from "/components/elements/camera";
+import DefaultLayout from "/components/layouts/DefaultLayout";
 
 export default function Home() {
   const [selectedDeviceId, setSelectedDeviceId] = useState();
@@ -8,11 +8,11 @@ export default function Home() {
 
   const handleDevices = useCallback(
     (mediaDevices) => {
-      setDevices(mediaDevices.filter(({ kind }) => kind === 'videoinput'));
+      setDevices(mediaDevices.filter(({ kind }) => kind === "videoinput"));
       if (devices?.length && !selectedDeviceId)
         setSelectedDeviceId(devices[0]?.deviceId);
     },
-    [devices, selectedDeviceId]
+    [devices, selectedDeviceId],
   );
 
   useEffect(() => {
