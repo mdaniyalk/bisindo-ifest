@@ -12,6 +12,9 @@
   },
   "dependencies": {
     "@headlessui/react": "^1.7.2",
+    "@mediapipe/camera_utils": "^0.3.1640029074",
+    "@mediapipe/drawing_utils": "^0.3.1620248257",
+    "@mediapipe/holistic": "^0.5.1635989137",
     "next": "12.2.5",
     "react": "18.2.0",
     "react-dom": "18.2.0",
