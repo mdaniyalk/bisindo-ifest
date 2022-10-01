@@ -1,0 +1,10 @@
+video berdiri per kata = 20 di kamar, 20 di tempat lain, 20 grayscale, 40 volunteer = 100
+video duduk per kata = 30 di kamar, 60 volunteer, 30 grayscale, 15 pake hp, 15 di tempat lain = 150
+
+target total video per kata = tahap 1 - 150, 150 sintetis, tahap 2 - 250, 250 sintetis, tahap 3 - 400, 400 sintetis, tahap 4 - 1000, 1000 sintetis
+komposisi antara duduk berdiri = 3:2 sampe 2:3
+
+total kata = tahap 1 - 16, tahap 2 = 30, tahap 3 = 50, tahap 4 = 100
+kata tahap 1 = ['halo', 'nama', 'aku', 'perkenalkan', 'r', 'kami', 'd', 'a', 'n', 'i', 'y', 'l', 'u', 'g', 'm', 'NOTHING'] => 16
+tambahan tahap 2 = ['e', 'o', 'terima kasih', 'sama sama', 'selamat', 'pagi', 'siang', 'sore', 'malam', 'kamu', 'sayang', 'senang', 'ok', 'maaf' ] => 14
+tambahan tahap 3 = ['b', 'c', 'f', 'h', 'j', 'k', 'p', 'q', 's', 't', 'v', 'w', 'x', 'z', ] => 20
