@@ -14,5 +14,8 @@
 /model_4.h5
 /dataset_raw_berdiri
 /*.mp4
-/*.txt
+
 /*.pyc
+/Dataset_Keypoints_start_record
+/Dataset_Keypoints_Data_wo_face2
+/Dataset_Keypoints_start_record2
