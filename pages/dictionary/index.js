@@ -2,6 +2,8 @@ import DefaultLayout from "/components/layouts/DefaultLayout";
 import { HiSearch } from "react-icons/hi";
 import { useMemo, useState } from "react";
 import { useRouter } from "next/router";
+import clsx from "clsx";
+import { Video } from "/components/elements/video";
 
 // const CATEGORIES = [
 //   "alphabet",
@@ -74,31 +76,43 @@ function Dictionary() {
   const [search, setSearch] = useState("");
 
   const filteredDictItems = useMemo(() => {
-    if (category === "semua") {
-      router.replace("/dictionary");
-      return;
-    }
     const filteredByCategory = dictItems.filter((item) => {
-      if (!category || category === CATEGORIES.semua) return true;
+      if (!category) return true;
       return item.category === category;
     });
     const filteredBySearch = filteredByCategory.filter((item) =>
       item.label.includes(search),
     );
     return filteredBySearch;
-  }, [category, dictItems, router, search]);
+  }, [category, dictItems, search]);
+
+  const activeCategory = useMemo(() => {
+    if (!category || category === "") return CATEGORIES.semua;
+    return category;
+  }, [category]);
 
   return (
     <DefaultLayout title="SIBI Dictionary - Tutur">
       <div className="flex w-full min-h-screen">
         {/* sidebar */}
-        <nav className="bg-yellow-100 h-screen shadow-xl rounded-tr-[3em] rounded-br-[3em] p-8 space-y-1">
-          {Object.keys(CATEGORIES).map((category, index) => (
+        <nav className="bg-yellow-100 h-screen shadow-xl rounded-tr-[3em] rounded-br-[3em] p-8 space-y-1 sticky top-0">
+          {Object.keys(CATEGORIES).map((category) => (
             <div
-              key={index}
+              key={category}
               role="button"
-              onClick={() => router.push(`/dictionary?category=${category}`)}
-              className="px-6 py-2 bg-grad-orange rounded-full font-medium text-white w-fit"
+              onClick={() =>
+                router.push(
+                  category === CATEGORIES.semua
+                    ? "/dictionary"
+                    : `/dictionary?category=${category}`,
+                )
+              }
+              className={clsx(
+                "px-6 py-2 rounded-full font-medium text-white w-fit hover:-translate-y-[2px] hover:scale-105 duration-200",
+                activeCategory === category
+                  ? "bg-grad-green"
+                  : "bg-grad-orange",
+              )}
             >
               <span className="drop-shadow-md capitalize">{category}</span>
             </div>
@@ -106,9 +120,10 @@ function Dictionary() {
         </nav>
 
         {/* content */}
-        <div className="p-8 w-full">
-          {/* search */}
-          <div className="flex justify-end">
+        <div className="p-8 pt-4 w-full">
+          {/* topbar */}
+          <div className="flex justify-between items-baseline sticky top-0 z-50 bg-white py-4 -mx-8 px-8">
+            <h1 className="text-2xl font-medium text-c-05">Kamus SIBI</h1>
             <div className="group w-full md:w-[300px] flex items-center rounded-full border border-gray-300 shadow-sm  focus:border-indigo-300 px-4 text-c-05">
               <HiSearch className="w-6 h-6 " />
               <input
@@ -124,19 +139,11 @@ function Dictionary() {
           {/* video boxes */}
           <div className="grid gap-4 grid-cols-2 lg:grid-cols-4 mt-8">
             {filteredDictItems.map((item, index) => (
-              <div key={item.label}>
-                <video
-                  className="shadow-xl rounded-xl aspect-video object-cover object-center"
-                  controls
-                >
-                  <source
-                    src={`https://bisindo-surakarta.com/uploads/video/kosakata/video/${item.label}.mp4`}
-                  />
-                </video>
-                <div className="mt-2 font-medium text-center capitalize">
-                  {item.label}
-                </div>
-              </div>
+              <Video
+                key={item.label}
+                src={`https://bisindo-surakarta.com/uploads/video/kosakata/video/${item.label}.mp4`}
+                label={item.label}
+              ></Video>
             ))}
           </div>
         </div>
