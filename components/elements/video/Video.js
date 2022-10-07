@@ -1,12 +1,19 @@
 import { RenderIf } from "../RenderIf";
 import { HiPlay } from "react-icons/hi";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import clsx from "clsx";
 
-export function Video({ src, label, labelInside = false, onClick }) {
+export function Video({ src, label, labelInside = false, autoStart, onClick }) {
   const videoRef = useRef();
 
   const [isPlayed, setIsPlayed] = useState(false);
+
+  useEffect(() => {
+    if (autoStart) {
+      videoRef.current.play();
+      setIsPlayed(true);
+    }
+  }, [src, autoStart]);
 
   const clickHandler = () => {
     if (!isPlayed) {
@@ -26,6 +33,7 @@ export function Video({ src, label, labelInside = false, onClick }) {
         onClick={onClick ? onClick : clickHandler}
       >
         <video
+          muted
           loop
           ref={videoRef}
           className="aspect-video object-cover object-center w-full h-full"
