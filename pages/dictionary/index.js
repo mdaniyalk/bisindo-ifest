@@ -7,7 +7,11 @@ import { Video } from "/components/elements/video";
 import { RenderIf } from "/components/elements/RenderIf";
 import { BackgroundDecoration } from "/components/elements/decoration/BackgroundDecoration";
 import { useTailwindBreakpoint } from "/utils/hooks/useTailwindBreakpoint";
-import { DesktopCategory } from "/components/templates/dictionary";
+import {
+  DesktopCategory,
+  MobileCategories,
+} from "/components/templates/dictionary";
+import { BubbleButton } from "/components/elements/button";
 
 const CATEGORIES = {
   semua: "semua",
@@ -72,7 +76,6 @@ function Dictionary() {
   const [search, setSearch] = useState("");
 
   const [playedLabel, setPlayedLabel] = useState("1");
-  const heroVideoRef = useRef();
 
   const filteredDictItems = useMemo(() => {
     const filteredByCategory = dictItems.filter((item) => {
@@ -90,18 +93,32 @@ function Dictionary() {
     return category;
   }, [category]);
 
-  const layoutBreakpoint = useMemo(() => {
+  // Mobile responsive
+  const isMdOrMore = useMemo(() => {
     return isMd || isLg || isXl || is2Xl;
   }, [isMd, isLg, isXl, is2Xl]);
+
+  const [isCategoryMenuOpened, setIsCategoryMenuOpened] = useState(false);
 
   return (
     <DefaultLayout title="Kamus SIBI - Tutur">
       <div className="flex w-full relative">
-        {/* sidebar */}
-        <DesktopCategory
-          categories={CATEGORIES}
-          activeCategory={activeCategory}
-        />
+        {/* category list */}
+        <RenderIf when={!isMdOrMore}>
+          <MobileCategories
+            categories={CATEGORIES}
+            activeCategory={activeCategory}
+            isOpened={isCategoryMenuOpened}
+            setIsOpened={setIsCategoryMenuOpened}
+          />
+        </RenderIf>
+
+        <RenderIf when={isMdOrMore}>
+          <DesktopCategory
+            categories={CATEGORIES}
+            activeCategory={activeCategory}
+          />
+        </RenderIf>
 
         {/* content */}
         <div className="p-4 md:p-8 md:pt-4 w-full h-[calc(100vh-56px)] flex flex-col">
@@ -118,7 +135,14 @@ function Dictionary() {
             </div>
 
             {/* topbar */}
-            <div className="flex justify-end items-baseline sticky top-8 z-50 mt-4 md:mt-0 drop-shadow-xl">
+            <div className="flex justify-end items-center sticky top-8 z-50 mt-4 md:mt-0 drop-shadow-xl space-x-2">
+              <RenderIf when={!isMdOrMore}>
+                <BubbleButton
+                  text={activeCategory}
+                  onClick={() => setIsCategoryMenuOpened((current) => !current)}
+                />
+              </RenderIf>
+              {/* searchbar */}
               <div className="group w-full md:w-[300px] flex items-center rounded-full border border-gray-300 shadow-sm  focus:border-indigo-300 px-4 text-c-05 bg-white">
                 <HiSearch className="w-6 h-6 " />
                 <input
@@ -154,7 +178,7 @@ function Dictionary() {
                 <Video
                   src={`https://bisindo-surakarta.com/uploads/video/kosakata/video/${item.label}.mp4`}
                   label={item.label}
-                  onClick={!layoutBreakpoint && function () {}}
+                  onClick={!isMdOrMore && function () {}}
                 ></Video>
               </div>
             ))}
