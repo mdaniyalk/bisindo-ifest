@@ -1,8 +1,6 @@
 import DefaultLayout from "/components/layouts/DefaultLayout";
-import { HiSearch } from "react-icons/hi";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/router";
-import clsx from "clsx";
 import { Video } from "/components/elements/video";
 import { RenderIf } from "/components/elements/RenderIf";
 import { BackgroundDecoration } from "/components/elements/decoration/BackgroundDecoration";
@@ -12,55 +10,8 @@ import {
   MobileCategories,
 } from "/components/templates/dictionary";
 import { BubbleButton } from "/components/elements/button";
-
-const CATEGORIES = {
-  semua: "semua",
-  angka: "angka",
-  bulan: "bulan",
-  hari: "hari",
-  hewan: "hewan",
-  keluarga: "keluarga",
-  kerja: "kerja",
-  kota: "kota",
-  olahraga: "olahraga",
-  perkenalan: "perkenalan",
-  sifat: "sifat",
-};
-
-Object.freeze(CATEGORIES);
-
-const DICT_ITEMS = [
-  { label: "1", category: CATEGORIES.angka },
-  { label: "2", category: CATEGORIES.angka },
-  { label: "3", category: CATEGORIES.angka },
-  { label: "4", category: CATEGORIES.angka },
-  { label: "5", category: CATEGORIES.angka },
-  { label: "6", category: CATEGORIES.angka },
-  { label: "7", category: CATEGORIES.angka },
-  { label: "8", category: CATEGORIES.angka },
-  { label: "9", category: CATEGORIES.angka },
-  { label: "10", category: CATEGORIES.angka },
-  { label: "angka", category: CATEGORIES.angka },
-  { label: "januari", category: CATEGORIES.bulan },
-  { label: "februari", category: CATEGORIES.bulan },
-  { label: "maret", category: CATEGORIES.bulan },
-  { label: "april", category: CATEGORIES.bulan },
-  { label: "mei", category: CATEGORIES.bulan },
-  { label: "juni", category: CATEGORIES.bulan },
-  { label: "juli", category: CATEGORIES.bulan },
-  { label: "agustus", category: CATEGORIES.bulan },
-  { label: "september", category: CATEGORIES.bulan },
-  { label: "oktober", category: CATEGORIES.bulan },
-  { label: "november", category: CATEGORIES.bulan },
-  { label: "desember", category: CATEGORIES.bulan },
-  { label: "senin", category: CATEGORIES.hari },
-  { label: "selasa", category: CATEGORIES.hari },
-  { label: "rabu", category: CATEGORIES.hari },
-  { label: "kamis", category: CATEGORIES.hari },
-  { label: "jumat", category: CATEGORIES.hari },
-  { label: "sabtu", category: CATEGORIES.hari },
-  { label: "minggu", category: CATEGORIES.hari },
-];
+import { SearchBar } from "/components/elements/SearchBar";
+import { CATEGORIES, DICT_ITEMS } from "/utils/constants";
 
 function Dictionary() {
   const router = useRouter();
@@ -72,13 +23,12 @@ function Dictionary() {
     console.log(isSm, isMd, isLg);
   }, [isSm, isMd, isLg]);
 
-  const [dictItems, setDictItems] = useState(DICT_ITEMS);
   const [search, setSearch] = useState("");
 
   const [playedLabel, setPlayedLabel] = useState("1");
 
   const filteredDictItems = useMemo(() => {
-    const filteredByCategory = dictItems.filter((item) => {
+    const filteredByCategory = DICT_ITEMS.filter((item) => {
       if (!category) return true;
       return item.category === category;
     });
@@ -86,7 +36,7 @@ function Dictionary() {
       item.label.includes(search.toLowerCase()),
     );
     return filteredBySearch;
-  }, [category, dictItems, search]);
+  }, [category, search]);
 
   const activeCategory = useMemo(() => {
     if (!category || category === "") return CATEGORIES.semua;
@@ -142,23 +92,12 @@ function Dictionary() {
                   onClick={() => setIsCategoryMenuOpened((current) => !current)}
                 />
               </RenderIf>
-              {/* searchbar */}
-              <div className="group w-full md:w-[300px] flex items-center rounded-full border border-gray-300 shadow-sm  focus:border-indigo-300 px-4 text-c-05 bg-white">
-                <HiSearch className="w-6 h-6 " />
-                <input
-                  type="text"
-                  className="block w-full border-0 focus:ring-0"
-                  placeholder="cari..."
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                />
-              </div>
+              <SearchBar search={search} setSearch={setSearch} />
             </div>
           </div>
 
           {/* video boxes */}
           <RenderIf when={filteredDictItems.length === 0}>
-            {/* TODO: styling not found */}
             <div className="text-center mt-4">
               Tidak dapat menemukan
               <div>
