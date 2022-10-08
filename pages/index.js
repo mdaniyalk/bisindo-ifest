@@ -6,6 +6,7 @@ import { useRouter } from "next/router";
 import { extractKeypoints } from "/utils/ai/extractKeypoints";
 import * as tf from "@tensorflow/tfjs";
 import { SourcePicker } from "@mediapipe/control_utils";
+import { BubbleButton } from "/components/elements/button";
 
 const ACTIONS = [
   "halo",
@@ -98,6 +99,7 @@ function HomeManual() {
   };
 
   // Prediction
+  const [prediction, setPrediction] = useState();
   useEffect(() => {
     (async function () {
       if (!holistic) return;
@@ -121,7 +123,9 @@ function HomeManual() {
 
     const restf = model.predict(tf.tensor([sequence]));
     const index = indexOfMax(Array.from(restf.dataSync()));
-    console.log(ACTIONS[index]);
+    const pred = ACTIONS[index];
+    console.log(pred);
+    setPrediction(pred);
   }, [model, sequence]);
 
   const deviceId = useMemo(() => {
@@ -137,54 +141,49 @@ function HomeManual() {
 
     new SourcePicker({
       onFrame: async (image, size) => {
-        // console.log(image);
-        // console.log(1);
-        await holistic.send({ image: image });
+        // if (size.height && size.width) {
+        try {
+          await holistic.send({ image: image });
+        } catch (error) {
+          console.error(error);
+        }
+        // }
       },
     }).create(() => {}, {}, document.querySelector("#mediapipe-sender"));
   }, [holistic, deviceIdx]);
 
   const mediapipeSenderRef = useRef();
-  // useEffect(() => {
-  //   if (!deviceIdx) return;
-  //   if (!mediapipeSenderRef.current) return;
+  useEffect(() => {
+    if (!deviceIdx) return;
+    if (!mediapipeSenderRef.current) return;
 
-  //   const interval = setInterval(() => {
-  //     const list = document.querySelector(
-  //       ".control-panel-source-picker .dropdown-options",
-  //     )?.children;
-  //     if (list) {
-  //       list[deviceIdx].click();
-  //       clearInterval(interval);
-  //     }
-  //   }, 500);
-  // }, [deviceIdx]);
+    const interval = setInterval(() => {
+      const list = document.querySelector(
+        ".control-panel-source-picker .dropdown-options",
+      )?.children;
+      if (list) {
+        list[deviceIdx].click();
+        clearInterval(interval);
+      }
+    }, 1000);
+  }, [deviceIdx]);
 
   return (
     <DefaultLayout>
-      <div>cam</div>
-      {/* <RenderIf when={deviceIdx}> */}
+      <div>recognitor</div>
       <Webcam
         ref={videoRef}
         videoConstraints={{
           deviceId: deviceId,
-          // frameRate: { ideal: 10, max: 15 },
         }}
         // TODO: create mirror controller
         mirrored={true}
         className="w-full"
       ></Webcam>
-      {/* </RenderIf> */}
-      <div>
-        {deviceIdx} - {deviceId}
-      </div>
-      <div id="mediapipe-sender" className="" ref={mediapipeSenderRef}></div>
+      <div>result: {prediction}</div>
 
-      <div id="target" onClick={() => alert("hiiiii")}>
-        pppppppppp
-      </div>
-      <div
-        role="button"
+      <BubbleButton
+        text="Switch Camera"
         onClick={() => {
           const n = devices.length;
           if (deviceIdx === n - 1) {
@@ -198,9 +197,10 @@ function HomeManual() {
           }
           router.reload();
         }}
-      >
-        switch webcam
-      </div>
+      />
+
+      <div className="mt-10">abaikan yang dibawah ini</div>
+      <div id="mediapipe-sender" className="" ref={mediapipeSenderRef}></div>
     </DefaultLayout>
   );
 }
