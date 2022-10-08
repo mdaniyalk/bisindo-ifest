@@ -4,6 +4,7 @@
   "rules": {
     "prettier/prettier": "error",
     "require-jsdoc": "off",
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "no-console": "warn"
   }
 }
