@@ -3,8 +3,10 @@ import { Camera as MpCamera } from "@mediapipe/camera_utils";
 import { useEffect, useRef, useState } from "react";
 import Webcam from "react-webcam";
 import DefaultLayout from "/components/layouts/DefaultLayout";
+import { useRouter } from "next/router";
 
-function Home() {
+function HomeManual() {
+  const router = useRouter();
   const videoRef = useRef();
 
   const [holistic, setHolistic] = useState();
@@ -68,7 +70,7 @@ function Home() {
           await holistic.send({ image: videoRef.current.video });
         },
       });
-      // await camera.start();
+      await camera.start();
 
       setCamera(camera);
     })();
@@ -88,11 +90,7 @@ function Home() {
         role="button"
         onClick={() => {
           (async function () {
-            // await camera.stop();
-            // await holistic.close();
-
-            // const hol = createHolistic();
-            // setHolistic(hol);
+            await camera.stop();
 
             const n = devices.length;
             if (deviceIdx === n - 1) {
@@ -104,7 +102,7 @@ function Home() {
                 return idx + 1;
               });
             }
-            // await camera.start();
+            router.reload();
           })();
         }}
       >
@@ -114,4 +112,4 @@ function Home() {
   );
 }
 
-export default Home;
+export default HomeManual;
