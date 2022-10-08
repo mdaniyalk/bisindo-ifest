@@ -43,15 +43,17 @@ function HomeManual() {
   useEffect(() => {
     // TODO: set to environtment variable
     (async function () {
-      let model = await tf.loadLayersModel("indexeddb://model");
-      if (!model) {
+      let model;
+      try {
+        model = await tf.loadLayersModel("indexeddb://model");
+        console.info("model loaded from indexeddb");
+      } catch (error) {
         model = await tf.loadLayersModel("/ai/model.json");
         await model.save("indexeddb://model");
         console.info("model loaded from public");
-      } else {
-        console.info("model loaded from indexeddb");
+      } finally {
+        setModel(model);
       }
-      setModel(model);
     })();
   }, []);
 
