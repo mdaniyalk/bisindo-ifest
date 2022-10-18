@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { Holistic } from "@mediapipe/holistic";
 import { useEffect, useMemo, useRef, useState } from "react";
 import Webcam from "react-webcam";
@@ -7,6 +8,7 @@ import { extractKeypoints } from "/utils/ai/extractKeypoints";
 import * as tf from "@tensorflow/tfjs";
 import { SourcePicker } from "@mediapipe/control_utils";
 import { BubbleButton } from "/components/elements/button";
+import { IconFromUrl } from "/components/elements/icon";
 
 const ACTIONS = [
   "halo",
@@ -27,6 +29,8 @@ const ACTIONS = [
   "NOTHING",
 ];
 
+const modelVersion = process.env.NEXT_PUBLIC_MODEL_VERSION || "v6";
+
 function HomeManual() {
   const router = useRouter();
   const videoRef = useRef();
@@ -44,13 +48,16 @@ function HomeManual() {
     // TODO: set to environtment variable
     (async function () {
       let model;
+      const dbpath = `indexeddb://model${modelVersion}`;
+      const publicpath = `/ai/${modelVersion}/model.json`;
+
       try {
-        model = await tf.loadLayersModel("indexeddb://model");
-        console.info("model loaded from indexeddb");
+        model = await tf.loadLayersModel(dbpath);
+        console.info(`model ${modelVersion} loaded from indexeddb`);
       } catch (error) {
-        model = await tf.loadLayersModel("/ai/model.json");
-        await model.save("indexeddb://model");
-        console.info("model loaded from public");
+        const model = await tf.loadLayersModel(publicpath);
+        await model.save(`indexeddb://model${modelVersion}`);
+        console.info(`model ${modelVersion} loaded from public`);
       } finally {
         setModel(model);
       }
@@ -100,7 +107,7 @@ function HomeManual() {
     return hol;
   };
 
-  // Prediction
+  // PREDICTION: extract keypoint
   const [prediction, setPrediction] = useState();
   useEffect(() => {
     (async function () {
@@ -119,16 +126,17 @@ function HomeManual() {
     })();
   }, [holistic, model, sequence, step]);
 
+  // PREDICTION: predict
   useEffect(() => {
     // console.log("seq", sequence.length);
-    if (!model || sequence.length !== 45) return;
+    if (!model || sequence.length !== 45 || step % 5 != 0) return;
 
     const restf = model.predict(tf.tensor([sequence]));
     const index = indexOfMax(Array.from(restf.dataSync()));
     const pred = ACTIONS[index];
     console.log(pred);
     setPrediction(pred);
-  }, [model, sequence]);
+  }, [model, sequence, step]);
 
   const deviceId = useMemo(() => {
     return devices[deviceIdx]?.deviceId;
@@ -137,7 +145,7 @@ function HomeManual() {
   // Mediapipe Sender
   useEffect(() => {
     if (!holistic) return;
-    if (!videoRef.current.video) return;
+    if (!videoRef?.current?.video) return;
     if (document.querySelectorAll(".control-panel-source-picker").length > 0)
       return;
 
@@ -172,37 +180,56 @@ function HomeManual() {
 
   return (
     <DefaultLayout>
-      <div>recognitor</div>
-      <Webcam
-        ref={videoRef}
-        videoConstraints={{
-          deviceId: deviceId,
-        }}
-        // TODO: create mirror controller
-        mirrored={true}
-        className="w-full"
-      ></Webcam>
-      <div>result: {prediction}</div>
+      <div className="container mx-auto py-4 lg:space-y-2">
+        <div className="flex items-center space-x-2 fixed bottom-[40px] lg:static z-40 left-[20px] right-[20px] md:left-[80px] md:right-[80px]">
+          <div
+            role="button"
+            className="w-14 h-14 bg-white rounded-full px-2 hover-bubble"
+            onClick={() => {
+              const n = devices.length;
+              if (deviceIdx === n - 1) {
+                localStorage.setItem("deviceIdx", "0");
+                setDeviceIdx(0);
+              } else {
+                setDeviceIdx((idx) => {
+                  localStorage.setItem("deviceIdx", idx + 1 + "");
+                  return idx + 1;
+                });
+              }
+              router.reload();
+            }}
+          >
+            <img
+              src="/icon/switch-cam.svg"
+              alt="switch camera"
+              className="w-full h-full"
+            />
+          </div>
 
-      <BubbleButton
-        text="Switch Camera"
-        onClick={() => {
-          const n = devices.length;
-          if (deviceIdx === n - 1) {
-            localStorage.setItem("deviceIdx", "0");
-            setDeviceIdx(0);
-          } else {
-            setDeviceIdx((idx) => {
-              localStorage.setItem("deviceIdx", idx + 1 + "");
-              return idx + 1;
-            });
-          }
-          router.reload();
-        }}
-      />
+          <div className="px-4 py-4 w-full bg-grad-orange rounded-lg text-white font-medium text-xl border-2 border-opacity-40 border-white lg:border-none">
+            hasil: {prediction}
+          </div>
+        </div>
+        <div className="w-screen h-screen-no-header fixed left-0 top-header lg:static lg:w-full lg:h-full lg:rounded-lg overflow-hidden bg-cyan-300 max-h-screen-no-header">
+          {/* pppp */}
+          <Webcam
+            ref={videoRef}
+            videoConstraints={{
+              deviceId: deviceId,
+            }}
+            // TODO: create mirror controller
+            mirrored={true}
+            className="w-full object-center object-cover"
+          ></Webcam>
+        </div>
+      </div>
 
-      <div className="mt-10">abaikan yang dibawah ini</div>
-      <div id="mediapipe-sender" className="" ref={mediapipeSenderRef}></div>
+      {/* video sender */}
+      <div
+        id="mediapipe-sender"
+        className="hidden"
+        ref={mediapipeSenderRef}
+      ></div>
     </DefaultLayout>
   );
 }

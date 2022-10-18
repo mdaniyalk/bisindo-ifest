@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap");
 
 @tailwind base;
 
@@ -16,4 +16,20 @@ body {
 
 .bg-grad-green {
   background: linear-gradient(270deg, #129aa3 0%, #1bd5e1 100%);
+}
+
+.hover-bubble {
+  @apply hover:-translate-y-[2px] hover:scale-105 duration-200;
+}
+
+.h-screen-no-header {
+  height: calc(100vh - 56px);
+}
+
+.max-h-screen-no-header {
+  max-height: calc(100vh - 56px);
+}
+
+.top-header {
+  top: 56px;
 }
