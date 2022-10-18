@@ -1,4 +1,5 @@
 import Head from "next/head";
+import { Navbar } from "../templates/navbar";
 
 function DefaultLayout({ children, title = "Tutur" }) {
   return (
@@ -8,7 +9,7 @@ function DefaultLayout({ children, title = "Tutur" }) {
       </Head>
 
       <header>
-        <nav className="bg-red-300 p-4">ini navbar</nav>
+        <Navbar />
       </header>
       <main>{children}</main>
     </>
