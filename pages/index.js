@@ -8,7 +8,6 @@ import { extractKeypoints } from "/utils/ai/extractKeypoints";
 import * as tf from "@tensorflow/tfjs";
 import { SourcePicker } from "@mediapipe/control_utils";
 import { BubbleButton } from "/components/elements/button";
-import { IconFromUrl } from "/components/elements/icon";
 
 const ACTIONS = [
   "halo",
@@ -108,7 +107,7 @@ function HomeManual() {
   };
 
   // PREDICTION: extract keypoint
-  const [prediction, setPrediction] = useState();
+  const [predictions, setPredictions] = useState([]);
   useEffect(() => {
     (async function () {
       if (!holistic) return;
@@ -128,15 +127,18 @@ function HomeManual() {
 
   // PREDICTION: predict
   useEffect(() => {
-    // console.log("seq", sequence.length);
     if (!model || sequence.length !== 45 || step % 5 != 0) return;
 
     const restf = model.predict(tf.tensor([sequence]));
     const index = indexOfMax(Array.from(restf.dataSync()));
     const pred = ACTIONS[index];
-    console.log(pred);
-    setPrediction(pred);
-  }, [model, sequence, step]);
+
+    if (pred === "NOTHING") return;
+    if (pred.length === 0) return;
+    if (predictions.at(-1) !== pred) {
+      setPredictions([...predictions, pred]);
+    }
+  }, [model, predictions, sequence, step]);
 
   const deviceId = useMemo(() => {
     return devices[deviceIdx]?.deviceId;
@@ -151,13 +153,11 @@ function HomeManual() {
 
     new SourcePicker({
       onFrame: async (image, size) => {
-        // if (size.height && size.width) {
         try {
           await holistic.send({ image: image });
         } catch (error) {
           console.error(error);
         }
-        // }
       },
     }).create(() => {}, {}, document.querySelector("#mediapipe-sender"));
   }, [holistic, deviceIdx]);
@@ -206,9 +206,10 @@ function HomeManual() {
             />
           </div>
 
-          <div className="px-4 py-4 w-full bg-grad-orange rounded-lg text-white font-medium text-xl border-2 border-opacity-40 border-white lg:border-none">
-            hasil: {prediction}
+          <div className="px-4 py-4 w-full bg-grad-orange rounded-lg text-white font-medium text-xl border-2 border-opacity-40 border-white lg:border-none capitalize tracking-wide">
+            {predictions.length === 0 ? "-" : predictions.join("  ")}
           </div>
+          <BubbleButton text="Reset" onClick={() => setPredictions([])} />
         </div>
         <div className="w-screen h-screen-no-header fixed left-0 top-header lg:static lg:w-full lg:h-full lg:rounded-lg overflow-hidden bg-cyan-300 max-h-screen-no-header">
           {/* pppp */}
