@@ -6,7 +6,7 @@ export function BubbleButton({ text, bgGreen, onClick, className }) {
       role="button"
       onClick={onClick}
       className={clsx(
-        "px-6 py-2 rounded-full font-medium text-white w-fit hover:-translate-y-[2px] hover:scale-105 duration-200",
+        "px-6 py-2 rounded-full font-medium text-white w-fit hover-bubble",
         bgGreen ? "bg-grad-green" : "bg-grad-orange",
         className,
       )}
