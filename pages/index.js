@@ -8,27 +8,20 @@ import { extractKeypoints } from "/utils/ai/extractKeypoints";
 import * as tf from "@tensorflow/tfjs";
 import { SourcePicker } from "@mediapipe/control_utils";
 import { BubbleButton } from "/components/elements/button";
+import * as actions from "/utils/constants/actions";
 
-const ACTIONS = [
-  "halo",
-  "nama",
-  "aku",
-  "perkenalkan",
-  "r",
-  "kami",
-  "d",
-  "a",
-  "n",
-  "i",
-  "y",
-  "l",
-  "u",
-  "g",
-  "m",
-  "NOTHING",
-];
+const modelVersion = process.env.NEXT_PUBLIC_MODEL_VERSION || "v7";
+const modelInputSequenceLength =
+  Number(process.env.NEXT_PUBLIC_MODEL_INPUT_SEQUENCE_LENGTH) || 23;
+const modelPredictionSkipLength =
+  Number(process.env.NEXT_PUBLIC_MODEL_PREDICTION_SKIP_LENGTH) || 5;
 
-const modelVersion = process.env.NEXT_PUBLIC_MODEL_VERSION || "v6";
+let ACTIONS;
+if (modelVersion === "v6") {
+  ACTIONS = actions.ACTIONSV6;
+} else if (modelVersion === "v7") {
+  ACTIONS = actions.ACTIONSV7;
+}
 
 function HomeManual() {
   const router = useRouter();
@@ -117,7 +110,7 @@ function HomeManual() {
         setStep((s) => s + 1);
         // const s = sequence;
         setSequnce((s) => {
-          if (s.length === 45) s.shift();
+          if (s.length === modelInputSequenceLength) s.shift();
           const keypoints = extractKeypoints(results);
           return [...s, keypoints];
         });
@@ -127,17 +120,23 @@ function HomeManual() {
 
   // PREDICTION: predict
   useEffect(() => {
-    if (!model || sequence.length !== 45 || step % 5 != 0) return;
+    if (
+      !model ||
+      sequence.length !== modelInputSequenceLength ||
+      step % modelPredictionSkipLength != 0
+    )
+      return;
 
     const restf = model.predict(tf.tensor([sequence]));
     const index = indexOfMax(Array.from(restf.dataSync()));
     const pred = ACTIONS[index];
 
-    if (pred === "NOTHING") return;
-    if (pred.length === 0) return;
-    if (predictions.at(-1) !== pred) {
-      setPredictions([...predictions, pred]);
-    }
+    console.log(pred);
+    if (pred === "NOTHING" || !pred) return;
+    if (predictions.length === 0) return;
+    if (predictions.at(-1) === pred) return;
+
+    setPredictions([...predictions, pred]);
   }, [model, predictions, sequence, step]);
 
   const deviceId = useMemo(() => {
@@ -153,6 +152,7 @@ function HomeManual() {
 
     new SourcePicker({
       onFrame: async (image, size) => {
+        if (size.height === 0 || size.width === 0) return;
         try {
           await holistic.send({ image: image });
         } catch (error) {
