@@ -23,7 +23,7 @@ export function MobileCategories({
         {Object.keys(categories).map((category) => (
           <BubbleButton
             key={category}
-            text={category}
+            text={categories[category].split("_")}
             className="w-[80%] text-center hover:scale-[102%] drop-shadow"
             onClick={() =>
               router.push(

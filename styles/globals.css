@@ -18,6 +18,40 @@ body {
   background: linear-gradient(270deg, #129aa3 0%, #1bd5e1 100%);
 }
 
+.hover-bubble {
+  @apply hover:-translate-y-[2px] hover:scale-105 duration-200;
+}
+
 .h-screen-no-header {
   height: calc(100vh - 56px);
+}
+
+.max-h-screen-no-header {
+  max-height: calc(100vh - 56px);
+}
+
+.top-header {
+  top: 56px;
+}
+
+/* width */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  box-shadow: inset 0 0 5px grey;
+  border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #129aa3;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #1bd5e1;
 }
