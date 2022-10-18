@@ -8,9 +8,9 @@ import cv2
 
 
 class Extractor:
-    def __init__(self):
+    def __init__(self, actions):
         self.mp_detect = Detector()
-        self.actions = np.array(['halo', 'nama', 'aku', 'perkenalkan', 'r', 'kami', 'd', 'a', 'n', 'i', 'y', 'l', 'u', 'g', 'm', 'NOTHING'])
+        self.actions = actions
         
     
     def keypoint_to_array(self, path, actions, num_video, num_frame):
