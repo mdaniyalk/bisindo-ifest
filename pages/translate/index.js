@@ -6,5 +6,4 @@ const Translate = () => {
     </DefaultLayout>
   );
 };
-
 export default Translate;
