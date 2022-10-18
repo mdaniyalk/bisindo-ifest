@@ -10,7 +10,7 @@ import { SourcePicker } from "@mediapipe/control_utils";
 import { BubbleButton } from "/components/elements/button";
 import * as actions from "/utils/constants/actions";
 
-const modelVersion = process.env.NEXT_PUBLIC_MODEL_VERSION || "v7";
+const modelVersion = process.env.NEXT_PUBLIC_MODEL_VERSION || "v8";
 const modelInputSequenceLength =
   Number(process.env.NEXT_PUBLIC_MODEL_INPUT_SEQUENCE_LENGTH) || 23;
 const modelPredictionSkipLength =
@@ -21,6 +21,8 @@ if (modelVersion === "v6") {
   ACTIONS = actions.ACTIONSV6;
 } else if (modelVersion === "v7") {
   ACTIONS = actions.ACTIONSV7;
+} else if (modelVersion === "v8") {
+  ACTIONS = actions.ACTIONSV8;
 }
 
 function HomeManual() {
