@@ -43,7 +43,7 @@ function Translate() {
     }
   };
   return (
-    <DefaultLayout title="Translate SIBI - Tutur">
+    <DefaultLayout title="Translate Bisindo - Tutur">
       <div className="flex flex-row justify-center justify-items-center place-items-center min-h-[100vh] md:my-16 xl:my-0">
         <div className="flex flex-row justify-center justify-items-center place-items-center flex-wrap">
           {/* Translate box */}

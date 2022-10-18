@@ -23,11 +23,11 @@ body {
 }
 
 .h-screen-no-header {
-  height: calc(100vh - 56px);
+  height: calc(100vh - 68px);
 }
 
 .max-h-screen-no-header {
-  max-height: calc(100vh - 56px);
+  max-height: calc(100vh - 68px);
 }
 
 .top-header {

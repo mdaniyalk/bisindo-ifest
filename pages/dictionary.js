@@ -67,7 +67,7 @@ function Dictionary() {
         </RenderIf>
 
         {/* content */}
-        <div className="p-4 md:p-8 md:pt-4 w-full h-[calc(100vh-56px)] flex flex-col">
+        <div className="p-4 md:p-8 md:pt-4 w-full h-screen-no-header flex flex-col">
           <div className="">
             {/* highlight */}
             <div className="md:hidden">
