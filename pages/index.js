@@ -131,12 +131,12 @@ function HomeManual() {
     const index = indexOfMax(Array.from(restf.dataSync()));
     const pred = ACTIONS[index];
 
-    console.log(pred);
+    // console.log(pred);
     if (pred === "NOTHING" || !pred) return;
-    if (predictions.length === 0) return;
-    if (predictions.at(-1) === pred) return;
 
-    setPredictions([...predictions, pred]);
+    if (predictions.length === 0 || predictions.at(-1) !== pred) {
+      setPredictions([...predictions, pred]);
+    }
   }, [model, predictions, sequence, step]);
 
   const deviceId = useMemo(() => {
