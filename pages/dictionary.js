@@ -17,11 +17,7 @@ function Dictionary() {
   const router = useRouter();
   const { category } = router.query;
 
-  const { isSm, isMd, isLg, isXl, is2Xl } = useTailwindBreakpoint();
-
-  useEffect(() => {
-    console.log(isSm, isMd, isLg);
-  }, [isSm, isMd, isLg]);
+  const { isMd, isLg, isXl, is2Xl } = useTailwindBreakpoint();
 
   const [search, setSearch] = useState("");
 
@@ -51,7 +47,7 @@ function Dictionary() {
   const [isCategoryMenuOpened, setIsCategoryMenuOpened] = useState(false);
 
   return (
-    <DefaultLayout title="Kamus SIBI - Tutur">
+    <DefaultLayout title="Kamus Bisindo - Tutur">
       <div className="flex w-full relative">
         {/* category list */}
         <RenderIf when={!isMdOrMore}>
@@ -77,7 +73,7 @@ function Dictionary() {
             <div className="md:hidden">
               <Video
                 key={playedLabel}
-                src={`https://bisindo-surakarta.com/uploads/video/kosakata/video/${playedLabel}.mp4`}
+                src={`/dictionary/${playedLabel}.mp4`}
                 label={playedLabel}
                 labelInside
                 autoStart
@@ -115,7 +111,7 @@ function Dictionary() {
                 }}
               >
                 <Video
-                  src={`https://bisindo-surakarta.com/uploads/video/kosakata/video/${item.label}.mp4`}
+                  src={`/dictionary/${item.label}.mp4`}
                   label={item.label}
                   onClick={!isMdOrMore && function () {}}
                 ></Video>
