@@ -69,3 +69,5 @@ export const ACTIONSV7 = [
   "y",
   "z",
 ];
+
+export const ACTIONSV8 = ACTIONSV7;
