@@ -9,11 +9,34 @@ import "swiper/css";
 import "swiper/css/pagination";
 import { GuideItem } from "./GuideItem";
 
+const guideItems = [
+  {
+    title: "Recognition",
+    imageSrc: "/guide/recognition.svg",
+    description: "Fitur ini akan mengenali <b>gerakan tangan</b> Anda",
+  },
+  {
+    title: "Translator",
+    imageSrc: "/guide/translator-hand.svg",
+    description: "Mengubah dari <b>teks menjadi bahasa isyarat</b>",
+  },
+  {
+    title: "Translator",
+    imageSrc: "/guide/translator-mic.svg",
+    description: "Atau hanya dengan <b>mengatakan secara lisan</b>",
+  },
+  {
+    title: "Dictionary",
+    imageSrc: "/guide/dictionary.svg",
+    description: "Temukan <b>kosakata</b> dalam kamus bahasa isyarat",
+  },
+];
+
 export function Guide({ isOpen, setIsOpen }) {
   return (
     <>
       <RenderIf when={isOpen}>
-        <div className="h-screen-no-header absolute top-0 left-0 w-full p-4 flex items-center isolate">
+        <div className="h-screen-no-header absolute top-0 left-0 w-full p-4 flex items-center isolate z-50">
           <div
             onClick={null}
             className="bg-white shadow-md pt-8 pb-4 rounded-[20px] w-full mx-auto max-w-[500px] h-fit z-20 relative"
@@ -57,9 +80,15 @@ export function Guide({ isOpen, setIsOpen }) {
               }}
               grabCursor={true}
             >
-              <SwiperSlide>
-                <GuideItem title="Guide" />
-              </SwiperSlide>
+              {guideItems.map((guide, index) => (
+                <SwiperSlide key={index}>
+                  <GuideItem
+                    title={guide.title}
+                    imageSrc={guide.imageSrc}
+                    description={guide.description}
+                  />
+                </SwiperSlide>
+              ))}
             </Swiper>
 
             {/* close button */}
@@ -73,7 +102,7 @@ export function Guide({ isOpen, setIsOpen }) {
           {/* backdrop */}
           <div
             onClick={() => setIsOpen(false)}
-            className="w-full h-full absolute left-0 top-0 z-10 bg-c-01 opacity-20 backdrop-blur-lg"
+            className="w-full h-screen fixed left-0 top-0 z-10 bg-gray-600 opacity-20 backdrop-blur-lg"
           ></div>
         </div>
       </RenderIf>

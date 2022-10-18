@@ -1,7 +1,10 @@
 import Head from "next/head";
+import { useState } from "react";
+import { Guide } from "../templates/guide";
 import { Navbar } from "../templates/navbar";
 
 function DefaultLayout({ children, title = "Tutur" }) {
+  const [isGuideOpen, setIsGuideOpen] = useState(false);
   return (
     <>
       <Head>
@@ -9,9 +12,10 @@ function DefaultLayout({ children, title = "Tutur" }) {
       </Head>
 
       <header>
-        <Navbar />
+        <Navbar setIsGuideOpen={setIsGuideOpen} />
       </header>
       <main>{children}</main>
+      <Guide isOpen={isGuideOpen} setIsOpen={setIsGuideOpen} />
     </>
   );
 }
