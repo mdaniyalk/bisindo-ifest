@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Video } from "/components/elements/video";
 import DefaultLayout from "/components/layouts/DefaultLayout";
+import { BackgroundDecoration } from "/components/elements/decoration/BackgroundDecoration";
 import { DICT_ITEMS } from "/utils/constants";
 import Image from "next/image";
 
@@ -113,6 +114,7 @@ function Translate() {
           </div>
         </div>
       </div>
+      <BackgroundDecoration />
     </DefaultLayout>
   );
 }
