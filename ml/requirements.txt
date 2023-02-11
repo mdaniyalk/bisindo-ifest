@@ -1,7 +1,7 @@
-tensorflow
-tensorflow-gpu
 opencv-python
-mediapipe
+mediapipe; platform_system != "Darwin" or platform.machine != "arm64"
+mediapipe-silicon; platform_system == "Darwin" and platform.machine == "arm64"
+protobuf>=3.11,<4
 sklearn
 matplotlib
 numpy
