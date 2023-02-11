@@ -1,6 +1,6 @@
-import Head from 'next/head';
+import Head from "next/head";
 
-function DefaultLayout({ children, title = 'Tutur' }) {
+function DefaultLayout({ children, title = "Tutur" }) {
   return (
     <>
       <Head>
